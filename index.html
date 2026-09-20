@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday!</title>
+  
+  <!-- Google Fonts for Page 2 -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100vw;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-color: #0d1117;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* ================= PAGE 1 STYLES ================= */
+    #page1 {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    #page1.fade-out {
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
+    }
+
+    .media-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      max-height: 70vh;
+      border-radius: 16px;
+      overflow: hidden;
+      background-color: #000000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      border: 1px solid #30363d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #knockVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .error-gif {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .start-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 17, 23, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: opacity 0.3s ease;
+    }
+
+    .start-overlay span {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffffff;
+      background: #238636;
+      padding: 16px 32px;
+      border-radius: 40px;
+      box-shadow: 0 4px 15px rgba(35, 134, 54, 0.4);
+    }
+
+    .input-section {
+      margin-top: 24px;
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(15px);
+      transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+    }
+
+    .input-section.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 18px;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      background-color: #161b22;
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #58a6ff;
+    }
+
+    input[type="text"]::placeholder {
+      color: #8b949e;
+    }
+
+    button.enter-btn {
+      padding: 14px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #238636;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button.enter-btn:hover {
+      background-color: #2ea043;
+    }
+
+    /* ================= PAGE 2 STYLES ================= */
+    #page2 {
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+      background-color: #1a0f0a;
+      font-family: 'Dancing Script', cursive;
+      padding: 20px 0;
+      opacity: 0;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #page2.fade-in {
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .video-wrapper {
+      width: 90vw;
+      max-width: 480px;
+      margin-bottom: 25px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .container {
+      position: relative;
+      width: 90vw;
+      max-width: 480px;
+      height: 90vh;
+      max-height: 820px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .parchment {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('parchment.jpg');
+      background-size: cover;
+      background-position: center;
+      padding: 45px 35px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('map.jpg');
+      background-size: cover;
+      background-position: center;
+      z-index: 5;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding-bottom: 50px;
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 3.5s ease-in-out;
+    }
+
+    .map-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Flashing / Pulsing Animation for Action Button */
+    .action-btn {
+      background: rgba(238, 222, 196, 0.95);
+      border: 2px solid #5c3a21;
+      color: #3b2219;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 12px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: transform 0.2s, background 0.2s;
+      animation: flashPulse 1.5s infinite ease-in-out;
+    }
+
+    @keyframes flashPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 223, 138, 0.6), 0 4px 15px rgba(0, 0, 0, 0.5);
+        background: rgba(238, 222, 196, 0.95);
+      }
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 25px rgba(255, 230, 150, 1), 0 6px 20px rgba(0, 0, 0, 0.7);
+        background: #fff3d1;
+      }
+    }
+
+    .action-btn:hover {
+      animation: none;
+      transform: scale(1.08);
+      background: #e2c9a0;
+    }
+
+    .letter-container {
+      width: 100%;
+      max-height: 82%;
+      overflow-y: auto;
+      opacity: 1;
+      transition: opacity 2.5s ease-in-out;
+      scroll-behavior: smooth;
+    }
+
+    .letter-container.fade-out {
+      opacity: 0;
+    }
+
+    .letter-text {
+      font-size: 1.35rem;
+      line-height: 1.6;
+      color: #2b1810;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      text-shadow: 0.3px 0.3px 0px rgba(0,0,0,0.15);
+    }
+    
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background-color: #3b2219;
+      vertical-align: middle;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .mischief-bar {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 2s ease-in-out, transform 0.2s;
+      font-size: 1.9rem;
+      font-weight: bold;
+      color: #3b2219;
+      text-align: center;
+      border-top: 1px solid rgba(92, 58, 33, 0.4);
+      padding-top: 10px;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .mischief-bar.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mischief-bar.visible:hover {
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE 1 SECTION -->
+  <div id="page1">
+    <div class="media-wrapper">
+      <div id="startOverlay" class="start-overlay" onclick="startVideo()">
+        <span>🔊 Tap to Play</span>
+      </div>
+
+      <video id="knockVideo" playsinline>
+        <source src="1000151112.mp4" type="video/mp4">
+        Your browser does not support video playback.
+      </video>
+
+      <img id="errorGif" class="error-gif" src="1000151398.gif" alt="I AM SORRY, BABU">
+    </div>
+
+    <div id="interactiveBar" class="input-section">
+      <div class="input-group">
+        <input type="text" id="nameInput" placeholder="your name" autocomplete="off">
+        <button class="enter-btn" onclick="submitAnswer()">Enter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 SECTION -->
+  <div id="page2">
+    <!-- Background Music Track -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="hp-theme.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- TOP COMPONENT: Video -->
+    <div class="video-wrapper">
+      <video controls width="100%" playsinline preload="metadata">
+        <source src="shinchan-birthday.mp4" type="video/mp4; codecs=avc1.42E01E, mp4a.40.2">
+        Your browser does not support HTML5 video.
+      </video>
+    </div>
+
+    <!-- BOTTOM COMPONENT: Parchment Paper -->
+    <div class="container">
+      <div class="parchment">
+        <div class="letter-container" id="letterContainer">
+          <div class="letter-text" id="typewriter"></div>
+        </div>
+        <div class="mischief-bar" id="mischief" onclick="resetMap()">Mischief Managed</div>
+      </div>
+
+      <div class="map-overlay" id="map">
+        <button class="action-btn" onclick="revealLetter()">
+          I solemnly swear that I'm up to no good
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================= PAGE 1 LOGIC ================= */
+    const knockVideo = document.getElementById('knockVideo');
+    const errorGif = document.getElementById('errorGif');
+    const startOverlay = document.getElementById('startOverlay');
+    const interactiveBar = document.getElementById('interactiveBar');
+    const nameInput = document.getElementById('nameInput');
+    const page1 = document.getElementById('page1');
+    const page2 = document.getElementById('page2');
+
+    function startVideo() {
+      startOverlay.style.opacity = '0';
+      setTimeout(() => {
+        startOverlay.style.display = 'none';
+      }, 300);
+
+      knockVideo.muted = false;
+      knockVideo.play();
+    }
+
+    knockVideo.addEventListener('ended', () => {
+      interactiveBar.classList.add('visible');
+      nameInput.focus();
+    });
+
+    nameInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        submitAnswer();
+      }
+    });
+
+    function submitAnswer() {
+      const enteredName = nameInput.value.trim();
+
+      // Change #1: Password set to "Bhumi"
+      if (enteredName.toLowerCase() === "bhumi") {
+        page1.classList.add('fade-out');
+
+        setTimeout(() => {
+          page1.style.display = 'none';
+          page2.style.display = 'flex';
+          page2.classList.add('fade-in');
+          document.body.style.overflowY = 'auto';
+        }, 600);
+
+      } else {
+        knockVideo.style.display = 'none';
+        errorGif.style.display = 'block';
+        nameInput.value = '';
+        nameInput.placeholder = 'Try again...';
+      }
+    }
+
+    /* ================= PAGE 2 LOGIC ================= */
+    // Change #2: Updated custom birthday wish
+    const message = `Happy Birthday Bhumi 🫶🏻\n\nIt's been three months now that we're together as a couple. It's been a good journey till now. And I honestly enjoying dating you. I enjoy the time that we spend together. You've truly become a part of my life now.\nIt's kinda like,\n\nतुम से ही दिन होता हैं\nसुरमई शाम आती हैं\nतुम से ही...\n\nYou're beautiful inside and out. You're loving, caring, and most importantly understanding. I like the fact that I'm your first boyfriend. I wish and will try to end up being your last boyfriend as well. Watching us grow closer and getting comfortable feels amazing. I just hope out bond just keep getting stronger as time goes on. I have got your back no matter what. 🫂\n\nI wish you nothing but beauty, health, happiness and all the things that your heart desires.\nLooking forward to many more fun dates ;)\n\nI love you ❤️\nYour man`;
+
+    let typingTimer = null;
+    const bgMusic = document.getElementById('bgMusic');
+
+    function revealLetter() {
+      const map = document.getElementById('map');
+      const letterContainer = document.getElementById('letterContainer');
+      const typewriter = document.getElementById('typewriter');
+      
+      bgMusic.currentTime = 0;
+      bgMusic.play().catch(e => console.log("Audio play blocked: ", e));
+
+      typewriter.innerHTML = '';
+      letterContainer.classList.remove('fade-out');
+      map.classList.add('fade-out');
+
+      // Change #3: Typewriter speed slowed to 90ms (from 60ms)
+      setTimeout(() => {
+        typeWriter(message, 'typewriter', 90);
+      }, 1800);
+    }
+
+    function typeWriter(text, elementId, speed) {
+      let i = 0;
+      const container = document.getElementById(elementId);
+      const letterContainer = document.getElementById('letterContainer');
+      
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      
+      function type() {
+        if (i < text.length) {
+          if (text.charAt(i) === '\n') {
+            container.appendChild(document.createElement('br'));
+          } else {
+            container.appendChild(document.createTextNode(text.charAt(i)));
+          }
+          container.appendChild(cursor);
+          i++;
+
+          // Change #3: Auto-scroll container down as new lines appear
+          letterContainer.scrollTop = letterContainer.scrollHeight;
+
+          typingTimer = setTimeout(type, speed);
+        } else {
+          cursor.remove();
+          document.getElementById('mischief').classList.add('visible');
+        }
+      }
+      type();
+    }
+
+    function resetMap() {
+      const map = document.getElementById('map');
+      const mischief = document.getElementById('mischief');
+      const letterContainer = document.getElementById('letterContainer');
+
+      mischief.classList.remove('visible');
+      letterContainer.classList.add('fade-out');
+
+      setTimeout(() => {
+        map.classList.remove('fade-out');
+      }, 1000);
+
+      setTimeout(() => {
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+      }, 4500);
+    }
+  </script>
+</body>
+</html>
